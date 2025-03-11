@@ -1,0 +1,30 @@
+.dashboard-layout {
+    display: flex;
+    height: 100vh;
+    /* Chiếm toàn bộ chiều cao màn hình */
+}
+
+.sidebar {
+    width: 250px;
+    /* Độ rộng cố định của sidebar */
+    background: #333;
+    color: white;
+    padding: 20px;
+    height: 100vh;
+    /* Chiều cao toàn màn hình */
+    position: fixed;
+    /* Cố định sidebar */
+    left: 0;
+    top: 0;
+}
+
+.content {
+    margin-left: 300px;
+    /* Dịch nội dung sang phải đúng bằng độ rộng sidebar */
+    flex-grow: 1;
+    /* Giúp nội dung mở rộng tự động */
+    padding: 20px;
+    /* Màu nền cho nội dung */
+    min-height: 100vh;
+    /* Đảm bảo nội dung không bị co lại */
+}
