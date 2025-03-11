@@ -1,10 +1,7 @@
 import Banner from "@/components/Banner"
 import BrandSection from "@/components/BrandSection"
-import ProductSection from "@/components/ProductSection"
+import ProductSection from "@/app/Product/ProductSection"
 import ReviewSection from "@/components/ReviewSection"
-import TestAPI from "@/components/testapi"
-import Login from "@/components/login"
-import ProductSectionx from "@/components/testPro"
 
 
 export default function Home() {

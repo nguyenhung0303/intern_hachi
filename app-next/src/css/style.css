@@ -294,12 +294,16 @@
 }
 
 .product-button {
+    display: flex;
     margin: auto;
     background-color: white;
     color: black;
     border: 1px solid #0000001A;
     margin-top: 36px;
+    text-align: center;
+    justify-content: center;
 }
+
 
 .product {
     display: flex;
@@ -386,7 +390,6 @@
     line-height: 45px;
 }
 
-.about-left {}
 
 .ip-about {
     position: relative;

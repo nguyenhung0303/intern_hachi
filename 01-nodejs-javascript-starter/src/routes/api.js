@@ -7,6 +7,7 @@ const upload = require('../middelware/multer.js')
 
 routerAPI.all("*", auth)
 
+
 routerAPI.get('/', (req, res) => {
     return res.status(200).json("Hello api OKss")
 });
