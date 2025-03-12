@@ -12,7 +12,7 @@ async function ProductSection() {
 
 
 
-            console.log("check>>>res", response)
+            console.log("check>>>respro", response)
             if (!response.ok) {
                 throw new Error("Lỗi khi tải dữ liệu");
             }
@@ -26,6 +26,7 @@ async function ProductSection() {
     // Lấy dữ liệu sản phẩm
     const productData = await fetchProducts();
     const products = productData.data || [];
+    console.log("check>>>respro2", products)
 
     // Kiểm tra lỗi và trạng thái dữ liệu
     if (products.length === 0) {

@@ -38,7 +38,7 @@ export default function ProductSwiper({ products }) {
                     // Sửa cách tạo URL hình ảnh
                     const imageUrl = firstImage
                         ? `${process.env.NEXT_PUBLIC_BACKEND_URL}/${firstImage.replace(/^\/+/, '')}`
-                        : "/assets/img/placeholder.jpg"; // Hình ảnh dự phòng
+                        : "/assets/img/placeholder.jpg";
 
                     return (
                         <SwiperSlide
