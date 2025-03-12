@@ -2,7 +2,7 @@ import axios from "axios";
 
 // Set config defaults when creating the instance
 const instance = axios.create({
-    baseURL: process.env.NEXT_PUBLIC_BACKEND_URL || "http://45.77.47.87",
+    baseURL: process.env.NEXT_PUBLIC_BACKEND_URL,
 });
 
 // Alter defaults after instance has been created

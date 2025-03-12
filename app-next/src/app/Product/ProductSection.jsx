@@ -8,7 +8,9 @@ async function ProductSection() {
     // Truy cập API trực tiếp từ server
     const fetchProducts = async () => {
         try {
-            const response = await fetch("http://localhost:8080/v1/api/Product" || "http://45.77.47.87/v1/api/Product");
+            const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/api/Product`);
+
+
 
             console.log("check>>>res", response)
             if (!response.ok) {
