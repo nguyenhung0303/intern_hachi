@@ -40,7 +40,7 @@ const upload = multer({ storage });
         //using mongoose
         await connection();
 
-        app.listen(port, () => {
+        app.listen(port, '0.0.0.0', () => {
             console.log(`Backend Nodejs App listening on port ${port}`)
         })
     } catch (error) {
