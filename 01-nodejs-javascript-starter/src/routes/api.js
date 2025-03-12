@@ -5,7 +5,7 @@ const { createProductController, getProducts, getProductsById, updateProduct, de
 const routerAPI = express.Router();
 const upload = require('../middelware/multer.js')
 
-routerAPI.all("*", auth)
+// routerAPI.all("*", auth)
 
 
 routerAPI.get('/', (req, res) => {
