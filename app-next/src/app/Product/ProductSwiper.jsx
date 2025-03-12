@@ -33,7 +33,7 @@ export default function ProductSwiper({ products }) {
                             <Link href={`/Product/${product._id}`}>
                                 {firstImage && (
                                     <Image
-                                        src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/${firstImage.replace(/^\/+/, '')}`}
+                                        src={`${process.env.NEXT_PUBLIC_BACKEND_URL || "http://45.77.47.87"}/${firstImage.replace(/^\/+/, '')}`}
                                         alt={product.name}
                                         width={295}
                                         height={298}

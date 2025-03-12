@@ -255,7 +255,8 @@ export default function ProductTable() {
                                     {products.find(p => p._id === selectedProductId)?.images.map((image, imgIndex) => (
                                         <img
                                             key={imgIndex}
-                                            src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/${image}`}
+                                            src={`${process.env.NEXT_PUBLIC_BACKEND_URL || "http://45.77.47.87"}/${image}`}
+
                                             alt="Ảnh hiện tại"
                                             style={{ width: "50px", height: "50px", margin: "5px" }}
                                         />
