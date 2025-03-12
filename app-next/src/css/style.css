@@ -131,7 +131,10 @@
 
 .product-item img {
     border-radius: 20px;
+}
 
+.Product-img-home {
+    width: 295px;
 }
 
 .banner-content {
