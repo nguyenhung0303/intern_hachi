@@ -9,9 +9,6 @@ async function ProductSection() {
     const fetchProducts = async () => {
         try {
             const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/api/Product`);
-
-
-
             console.log("check>>>respro", response)
             if (!response.ok) {
                 throw new Error("Lỗi khi tải dữ liệu");
