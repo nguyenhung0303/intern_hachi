@@ -1,6 +1,6 @@
 import Banner from "@/components/Banner"
 import BrandSection from "@/components/BrandSection"
-import ProductSection from "@/app/Product/ProductSection"
+import ProductSection from "@/components/Product/ProductSection"
 import ReviewSection from "@/components/ReviewSection"
 
 

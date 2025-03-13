@@ -1,7 +1,7 @@
 // ProductSection.js
 import Image from "next/image";
 import Link from "next/link";
-import ProductSwiper from "@/app/Product/ProductSwiper"; // Client component riêng cho Swiper
+import ProductSwiper from "@/components/Product/ProductSwiper"; // Client component riêng cho Swiper
 
 // Sử dụng async để tạo component SSR
 async function ProductSection() {
