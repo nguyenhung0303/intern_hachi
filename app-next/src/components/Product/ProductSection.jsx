@@ -2,13 +2,22 @@
 import Image from "next/image";
 import Link from "next/link";
 import ProductSwiper from "@/components/Product/ProductSwiper"; // Client component riêng cho Swiper
+import { cache } from "react";
 
 // Sử dụng async để tạo component SSR
 async function ProductSection() {
     // Truy cập API trực tiếp từ server
     const fetchProducts = async () => {
         try {
-            const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/api/Product`);
+            const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/api/Product`, {
+                cache: "no-store",
+                next: { revalidate: 0 }, // Luôn lấy dữ liệu mới
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+            });
+
             console.log("check>>>respro", response)
             if (!response.ok) {
                 throw new Error("Lỗi khi tải dữ liệu");
