@@ -17,7 +17,6 @@ export default function ProductSwiper({ products }) {
                 modules={[Navigation, Pagination]}
                 spaceBetween={10}
                 slidesPerView={slidesPerView}
-                navigation
                 pagination={{ clickable: true }}
                 loop={products.length > slidesPerView} // Chỉ bật chế độ loop khi có đủ slide
                 breakpoints={{

@@ -1,0 +1,89 @@
+@media screen and (max-width: 820px) {
+    .icon-search {
+        display: block;
+    }
+
+    .container {
+        margin: 0 16px 0 16px;
+    }
+
+    .menu-tag {
+        width: 24px;
+    }
+
+    .header-menu {
+        display: none;
+    }
+
+    .header-icon img {
+        width: 24px;
+    }
+
+    .banner-button {
+        width: 100%;
+    }
+
+
+
+    .header-search {
+        display: none;
+    }
+
+    .banner-main h2 {
+        font-size: 36px;
+    }
+
+    .brand-item img {
+        height: 22px;
+    }
+
+    .menu-tag {
+        display: block;
+    }
+
+    .footer-main-item-one {
+        max-width: 100%;
+    }
+
+    .brand-item {
+        margin-top: 22px;
+        padding: 0 12px 0 12px;
+    }
+
+    .about-box {
+        display: block;
+    }
+
+    .banner {
+        background: #F2F0F1;
+    }
+
+    .footer-main-item {
+        margin-bottom: 24px;
+    }
+
+    .footer-main-item-icon {
+        margin-bottom: 24px;
+    }
+
+    .review-title {
+        font-size: 32px;
+        line-height: 36px;
+    }
+
+    .banner-s {
+        background-image: url('/assets/img/banner-s.png');
+
+        max-width: 1000px;
+        height: 500px;
+        background-size: 100% 100%;
+        /* Hoặc background-size: cover; */
+        background-repeat: no-repeat;
+
+    }
+
+    .banner-highlights {
+        justify-content: center;
+    }
+
+}

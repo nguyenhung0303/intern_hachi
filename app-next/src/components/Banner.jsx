@@ -78,37 +78,41 @@ const Banner = () => {
     }, [displayedTitle, isDeleting, currentTitleIndex, isTyping, bannerData.titles]);
 
     return (
-        <div className="container-banner">
-            <div className="banner-slide active">
-                <div className="banner">
-                    <div className="container">
-                        <div className="banner-main">
-                            <div className="banner-content">
-                                <h2 className="typing-effect">
-                                    {displayedTitle}
-                                    {isTyping && <span className="typing-cursor">|</span>}
-                                </h2>
-                            </div>
-                            <div className="banner-content-des">
-                                <p>{bannerData.description}</p>
-                            </div>
-                            <button className="banner-button">Shop Now</button>
-                            <div className="banner-hightlights">
-                                {bannerData.stats.map((item, index) => (
-                                    <React.Fragment key={index}>
-                                        <div className="banner-hightlights-item">
-                                            <span className="hightlights-number">{item.number}</span>
-                                            <p>{item.text}</p>
-                                        </div>
-                                        {index < bannerData.stats.length - 1 && <div className="line-banner"></div>}
-                                    </React.Fragment>
-                                ))}
+        <>
+            <div className="container-banner">
+                <div className="banner-slide active">
+                    <div className="banner">
+                        <div className="container">
+                            <div className="banner-main">
+                                <div className="banner-content">
+                                    <h2 className="typing-effect">
+                                        {displayedTitle}
+                                        {isTyping && <span className="typing-cursor">|</span>}
+                                    </h2>
+                                </div>
+                                <div className="banner-content-des">
+                                    <p>{bannerData.description}</p>
+                                </div>
+                                <button className="banner-button">Shop Now</button>
+                                <div className="banner-hightlights">
+                                    {bannerData.stats.map((item, index) => (
+                                        <React.Fragment key={index}>
+                                            <div className="banner-hightlights-item">
+                                                <span className="hightlights-number">{item.number}</span>
+                                                <p>{item.text}</p>
+                                            </div>
+                                            {index < bannerData.stats.length - 1 && <div className="line-banner"></div>}
+                                        </React.Fragment>
+                                    ))}
+                                </div>
                             </div>
                         </div>
                     </div>
+
                 </div>
             </div>
-        </div>
+            <div className="banner-s"></div>
+        </>
     );
 };
 

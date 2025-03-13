@@ -17,10 +17,17 @@
 
 }
 
+.icon-search {
+    display: none;
+}
+
+.header-search {
+    width: 577px;
+    max-width: 100%;
+}
 
 .search-container {
     position: relative;
-    width: 577px;
 }
 
 .search-input {
@@ -87,11 +94,6 @@
     display: flex;
 }
 
-.banner {
-    background-image: url('/assets/img/bannerx.svg');
-    width: 100%;
-    height: 663px;
-}
 
 .banner {
     background-image: url('/assets/img/bannerx.svg');
@@ -105,12 +107,6 @@
 }
 
 /* 🔹 Responsive cho màn hình nhỏ */
-@media (max-width: 768px) {
-    .banner {
-        height: 400px;
-        /* Giảm chiều cao khi màn hình nhỏ */
-    }
-}
 
 .product-list {
     display: flex;
@@ -164,12 +160,33 @@
     text-align: center;
 }
 
+.swiper-button-prev-custom {
+    width: 28px;
+    margin-right: 16px;
+}
+
+.swiper-button-next-custom {
+    width: 28px;
+}
+
+.menu-tag {
+    display: none;
+}
+
 .banner-hightlights {
     display: flex;
     align-items: center;
     gap: 32px;
     margin-top: 46px;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    max-width: 600px;
 }
+
+.banner-hightlights-item {
+    margin: auto;
+}
+
 
 .banner-content-des p {
     font-size: 16px;
@@ -231,6 +248,10 @@
     top: 220px;
 }
 
+.brand-item {
+    margin: auto;
+}
+
 .bgr-brand {
     background-color: black;
 }
@@ -239,6 +260,7 @@
     display: flex;
     justify-content: space-between;
     padding: 43px 0 43px 0;
+    flex-wrap: wrap;
 }
 
 .froduct-rate {
@@ -296,6 +318,11 @@
     align-items: center;
 }
 
+.swiper-nav-buttons {
+    display: flex;
+    align-items: center;
+}
+
 .product-button {
     display: flex;
     margin: auto;
@@ -344,15 +371,23 @@
     line-height: 22px;
 }
 
+.swiper-button-next {
+    display: none;
+}
+
 .review-main {
     display: flex;
     gap: 20px;
 }
 
+.review-start {
+    display: flex;
+}
+
 .review-header {
     display: flex;
     justify-content: space-between;
-
+    margin-top: 70px;
 }
 
 .arow {
@@ -369,7 +404,6 @@
 .review-title {
     font-size: 48px;
     font-weight: 700;
-    margin-top: 70px;
 }
 
 .about-box {
@@ -402,7 +436,7 @@
     background: white;
     border-radius: 62px;
     width: 100%;
-    padding: 12px 124px 14px 52px;
+    padding: 12px 0px 14px 52px;
     font-size: 16px;
     border-radius: 62px;
 }
@@ -434,16 +468,22 @@
 .footer-main {
     display: flex;
     justify-content: space-between;
+    flex-wrap: wrap;
 }
 
 .footer-main-item-one {
     max-width: 248px;
+    width: 100%;
 }
 
 .footer-main-item-one h2 {
     font-weight: 700;
     font-size: 34px;
 
+}
+
+.footer-main-item {
+    margin: auto;
 }
 
 .footer-main-item-one p {
@@ -504,11 +544,18 @@
     align-items: center;
     padding-bottom: 88px;
     margin-top: 25px;
+    flex-wrap: wrap;
 
+}
+
+.pay a {
+    margin: auto;
 }
 
 .pay-icon {
     display: flex;
+    margin: auto;
+    margin-top: 16px;
 }
 
 .pay-icon img {
@@ -540,6 +587,7 @@
 
 .banner-slide.active {
     opacity: 1;
+    background: #F2F0F1;
 }
 
 

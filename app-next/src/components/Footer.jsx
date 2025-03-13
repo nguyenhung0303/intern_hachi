@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-
+import Image from 'next/image';
 const Footer = () => {
     return (
         <footer>
@@ -83,6 +83,19 @@ const Footer = () => {
                                 <li><p>How to - Blog</p></li>
                                 <li><p>Youtube Playlist</p></li>
                             </ul>
+                        </div>
+                    </div>
+                </div>
+                <div className="container">
+                    <div className="line-ft"></div>
+                    <div className="pay">
+                        <a href="#">Shop.co © 2000-2023, All Rights Reserved</a>
+                        <div className="pay-icon">
+                            {Array(5)
+                                .fill(0)
+                                .map((_, index) => (
+                                    <Image key={index} src="/assets/img/pay.svg" alt="Payment Icon" width={40} height={20} />
+                                ))}
                         </div>
                     </div>
                 </div>
