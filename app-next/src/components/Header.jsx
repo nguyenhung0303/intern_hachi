@@ -25,8 +25,8 @@ const Header = () => {
                             <ul>
                                 <li>Shop</li>
                                 <li>On Sale</li>
-                                <li>New Arrivals</li>
-                                <li>Brands</li>
+                                <li>Product</li>
+                                <li>Category</li>
                             </ul>
                         </nav>
                     </div>

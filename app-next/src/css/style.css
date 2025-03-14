@@ -420,6 +420,15 @@
     margin-top: 80px;
 }
 
+.product-p {
+    flex-wrap: wrap;
+}
+
+.product-item-page {
+    height: auto;
+    margin-bottom: 32px;
+}
+
 .about-left h2 {
     color: white;
     font-size: 40px;
@@ -440,7 +449,6 @@
     font-size: 16px;
     border-radius: 62px;
 }
-
 
 .ip-about img {
     position: absolute;
@@ -737,4 +745,98 @@
 .banner-button-d {
     width: 400px;
     max-width: 400px;
+}
+
+.product-page-box {
+    display: flex;
+    gap: 21px;
+}
+
+.product-filter {
+    width: 290px;
+    max-width: 100%;
+}
+
+.product-filter {
+    border-radius: 20px;
+    border: 1px solid #0000001A;
+    padding: 29px 24px 29px 24px;
+}
+
+.header-filter {
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 100%;
+    margin-bottom: 24px;
+}
+
+.filter-category-item ul {
+    margin-top: 24px;
+}
+
+.filter-category-item ul li a {
+    color: #00000099;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 100%;
+
+}
+
+.filter-category-item ul li {
+    margin-bottom: 20px;
+}
+
+
+
+.pagination {
+    display: flex;
+    gap: 8px;
+    margin-top: 20px;
+    max-width: 420px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.pagination button {
+    border: none;
+    background: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    color: #333;
+}
+
+.pagination .arrow {
+    padding: 8px;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+}
+
+.pagination .arrow:hover {
+    background-color: #f0f0f0;
+}
+
+.pagination .page-number {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+}
+
+.pagination .page-number:hover {
+    background-color: #f0f0f0;
+}
+
+.pagination .active {
+    background-color: #f0f0f0;
+    font-weight: bold;
+
+}
+
+.pagination .dots {
+    color: #888;
 }

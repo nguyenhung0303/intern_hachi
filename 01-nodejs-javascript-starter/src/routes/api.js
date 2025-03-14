@@ -3,7 +3,8 @@ const { GetUser, CreateUser, Login, } = require('../controllers/userController.j
 const auth = require('../middelware/auth.js')
 const { createProductController, getProducts, getProductsById, updateProduct, deleteProduct } = require('../controllers/productController.js');
 const routerAPI = express.Router();
-const upload = require('../middelware/multer.js')
+const upload = require('../middelware/multer.js');
+const { createCategoryController, getCategorys, updateCategoryController, deleteCategory } = require('../controllers/category.js');
 
 // routerAPI.all("*", auth)
 
@@ -27,4 +28,8 @@ routerAPI.get("/Product", getProducts)
 routerAPI.get("/Product/:id", getProductsById)
 routerAPI.post("/UpdateProduct/:id", upload.array('images', 10), updateProduct)
 routerAPI.delete("/deleteProduct/:id", deleteProduct)
+routerAPI.post("/create_category", upload.array('images', 10), createCategoryController)
+routerAPI.get("/get_category", getCategorys)
+routerAPI.post("/update_category/:id", upload.array('images', 10), updateCategoryController)
+routerAPI.delete("/delete_category/:id", deleteCategory)
 module.exports = routerAPI; 

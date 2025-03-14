@@ -1,3 +1,4 @@
+const { deleteCategoryService } = require('../services/categoryService');
 const { createProductService, getProductService, getProductByIdService, updateProductService, deleteProductService } = require('../services/productService')
 
 const createProductController = async (req, res) => {
@@ -56,6 +57,7 @@ const deleteProduct = async (req, res) => {
         return res.status(400).json(result);
     }
 }
+
 module.exports = {
     createProductController, getProducts, getProductsById, updateProduct, deleteProduct
 }

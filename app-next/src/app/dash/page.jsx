@@ -5,6 +5,7 @@ import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "@/components/context/AuthContext";
 import { useRouter } from "next/navigation";
 import ProductTable from "@/components/admin/product"
+import Category from "@/components/admin/category"
 
 export default function Home() {
     const router = useRouter();

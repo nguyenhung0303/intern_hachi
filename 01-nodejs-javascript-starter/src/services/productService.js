@@ -14,7 +14,14 @@ const createProductService = async (data, imageFiles) => {
         const sizes = Array.isArray(data.sizes)
             ? data.sizes
             : data.sizes?.split(",").map(s => s.trim()) || [];
+
+        // Xử lý categoryIds - chuyển thành mảng ObjectId
+        const categoryIds = Array.isArray(data.categoryIds)
+            ? data.categoryIds
+            : data.categoryIds?.split(",").map(id => id.trim()) || [];
+
         const oldPrice = data.oldPrice ? parseFloat(data.oldPrice) : 0;
+
         // Tạo sản phẩm mới
         const product = new Product({
             name: data.name,
@@ -24,6 +31,7 @@ const createProductService = async (data, imageFiles) => {
             colors,
             sizes,
             images: imageUrls,
+            categoryIds, // Thêm trường categoryIds
         });
 
         console.log("check>>>>product new", product);
@@ -46,35 +54,39 @@ const getProductService = async () => {
 };
 const updateProductService = async (productId, data, imageFiles = []) => {
     try {
-        // Tìm sản phẩm theo ID
+        // Tìm sản phẩm cần cập nhật
         const product = await Product.findById(productId);
 
         if (!product) {
             throw new Error('Không tìm thấy sản phẩm');
         }
 
-        // Xử lý hình ảnh mới (nếu có)
-        let updatedImages = [...product.images]; // Giữ lại ảnh cũ
-
+        // Xử lý hình ảnh
+        let updatedImages = [...product.images];
         if (imageFiles && imageFiles.length > 0) {
             const newImageUrls = imageFiles.map((file) => `/Upload/${file.filename}`);
-            // Thêm ảnh mới vào mảng ảnh
             updatedImages = newImageUrls;
         }
 
-        // Xử lý mảng màu sắc và kích thước
+        // Xử lý màu sắc
         const colors = Array.isArray(data.colors)
             ? data.colors
             : data.colors?.split(",").map(c => c.trim()) || product.colors;
 
+        // Xử lý kích thước
         const sizes = Array.isArray(data.sizes)
             ? data.sizes
             : data.sizes?.split(",").map(s => s.trim()) || product.sizes;
 
+        // Xử lý danh mục - thêm xử lý categoryIds
+        const categoryIds = Array.isArray(data.categoryIds)
+            ? data.categoryIds
+            : data.categoryIds?.split(",").map(id => id.trim()) || product.categoryIds;
+
         // Xử lý giá cũ
         const oldPrice = data.oldPrice ? parseFloat(data.oldPrice) : product.oldPrice;
 
-        // Cập nhật thông tin sản phẩm
+        // Cập nhật sản phẩm
         const updatedProduct = await Product.findByIdAndUpdate(
             productId,
             {
@@ -85,8 +97,9 @@ const updateProductService = async (productId, data, imageFiles = []) => {
                 colors,
                 sizes,
                 images: updatedImages,
+                categoryIds, // Thêm trường categoryIds vào cập nhật
             },
-            { new: true } // Trả về sản phẩm đã được cập nhật
+            { new: true }
         );
 
         console.log("check>>>>product updated", updatedProduct);

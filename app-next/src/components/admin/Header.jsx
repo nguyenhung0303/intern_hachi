@@ -9,7 +9,12 @@ export default function Header() {
             <div className="logo">Logo</div>
             <nav>
                 <ul className="menu">
-
+                    <li>
+                        <Link href="/dash">Product</Link>
+                    </li>
+                    <li>
+                        <Link href="/dash/category">Category</Link>
+                    </li>
                 </ul>
             </nav>
         </header>
