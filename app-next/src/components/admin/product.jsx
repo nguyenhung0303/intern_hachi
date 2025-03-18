@@ -1,13 +1,13 @@
-"use client";
-
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { Table, Button, Space, Typography, Modal, Form, Input, message, Popconfirm, Image, Select, Upload } from "antd";
-import { PlusOutlined, EditOutlined, DeleteOutlined } from "@ant-design/icons";
+import { PlusOutlined, EditOutlined, DeleteOutlined, InboxOutlined } from "@ant-design/icons";
 import { getProductApi, createProductApi, updateProductApi, deleteProductApi } from "@/util/api";
 import { getCategoryApi } from "@/util/api";
+import { toast } from "react-toastify";
 
 const { Title } = Typography;
 const { Option } = Select;
+const { Dragger } = Upload;
 
 export default function ProductTable() {
     const [products, setProducts] = useState([]);
@@ -20,6 +20,7 @@ export default function ProductTable() {
     const [imagePreviewUrls, setImagePreviewUrls] = useState([]);
     const [form] = Form.useForm();
     const [submitLoading, setSubmitLoading] = useState(false);
+    const fileInputRef = useRef(null);
 
     const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
     const SIZE_OPTIONS = ["XS", "S", "M", "L", "XL", "XXL", "XXXL"];
@@ -56,11 +57,11 @@ export default function ProductTable() {
 
     const handleImageUpload = (e) => {
         const files = Array.from(e.target.files);
-        setImageFiles(files);
+        setImageFiles(prev => [...prev, ...files]);
 
         // Tạo URL xem trước cho các ảnh đã chọn
         const previewUrls = files.map(file => URL.createObjectURL(file));
-        setImagePreviewUrls(previewUrls);
+        setImagePreviewUrls(prev => [...prev, ...previewUrls]);
     };
 
     // Xóa các URL xem trước khi component unmount để tránh rò rỉ bộ nhớ
@@ -116,7 +117,25 @@ export default function ProductTable() {
     const handleSubmit = async () => {
         try {
             const values = await form.validateFields();
+            const allowedTypes = ["image/jpeg", "image/png", "image/jpg"];
             setSubmitLoading(true);
+
+            let hasOversizedFile = false;
+            for (const file of imageFiles) {
+                if (!allowedTypes.includes(file.type)) {
+                    toast.error(`Ảnhk hông đúng định dạng! Chỉ chấp nhận JPG, JPEG, PNG.`);
+                    hasInvalidFile = true;
+                } else if (file.size > 2 * 1024 * 1024) {
+                    toast.error(`Ảnh vượt quá 2MB!`);
+                    hasInvalidFile = true;
+                }
+            }
+
+            // Nếu có file vượt quá kích thước, dừng xử lý
+            if (hasOversizedFile) {
+                setSubmitLoading(false);
+                return;
+            }
 
             const formData = new FormData();
             formData.append("name", values.name);
@@ -142,24 +161,29 @@ export default function ProductTable() {
             let response;
             if (isEditing) {
                 response = await updateProductApi(selectedProductId, formData);
-                console.log("Update response:", response); // Thêm log để debug
-
                 // Kiểm tra kỹ hơn response
                 if (response && (response.success !== false)) {
+
                     message.success("Cập nhật sản phẩm thành công!");
-                    handleCancel(); // Đóng modal
+                    handleCancel();
+                    toast.success("ok")
                     fetchProducts();
                 } else {
+                    toast.error("errr")
                     message.error(response?.message || "Cập nhật sản phẩm thất bại!");
                 }
             } else {
                 response = await createProductApi(formData);
                 if (response.success || response.product) {
                     message.success("Thêm sản phẩm thành công!");
+
                     handleCancel();
+                    toast.success("ok")
                     fetchProducts();
                 } else {
                     message.error(response?.message || "Thêm sản phẩm thất bại!");
+                    toast.error(response.error || "Có lỗi xảy ra!");
+
                 }
             }
         } catch (error) {
@@ -190,6 +214,23 @@ export default function ProductTable() {
         } finally {
             setLoading(false);
         }
+    };
+
+    const handleRemoveImage = (index) => {
+        // Release object URL to prevent memory leaks
+        URL.revokeObjectURL(imagePreviewUrls[index]);
+
+        const newFiles = [...imageFiles];
+        newFiles.splice(index, 1);
+        setImageFiles(newFiles);
+
+        const newUrls = [...imagePreviewUrls];
+        newUrls.splice(index, 1);
+        setImagePreviewUrls(newUrls);
+    };
+
+    const triggerFileInput = () => {
+        fileInputRef.current.click();
     };
 
     const columns = [
@@ -322,6 +363,7 @@ export default function ProductTable() {
                         {isEditing ? "Cập nhật" : "Thêm"}
                     </Button>,
                 ]}
+                width={720}
             >
                 <Form form={form} layout="vertical" name="productForm">
                     <Form.Item
@@ -430,54 +472,64 @@ export default function ProductTable() {
                         </Select>
                     </Form.Item>
 
-                    // Replace the existing Form.Item for image upload with this one
-
                     <Form.Item label="Hình ảnh">
-                        <Upload
-                            listType="picture-card"
-                            fileList={imageFiles.map((file, index) => ({
-                                uid: `-${index}`,
-                                name: file.name,
-                                status: 'done',
-                                url: imagePreviewUrls[index],
-                                originFileObj: file,
-                            }))}
-                            beforeUpload={(file) => {
-                                const isImage = file.type.startsWith('image/');
-                                if (!isImage) {
-                                    message.error('Chỉ có thể tải lên tệp hình ảnh!');
-                                    return false;
-                                }
-
-                                // Add to state without actually uploading
-                                setImageFiles(prev => [...prev, file]);
-                                setImagePreviewUrls(prev => [...prev, URL.createObjectURL(file)]);
-                                return false; // Prevent automatic upload
+                        <div
+                            style={{
+                                border: '1px dashed #d9d9d9',
+                                borderRadius: '8px',
+                                padding: '20px',
+                                textAlign: 'center',
+                                cursor: 'pointer',
+                                marginBottom: '16px',
+                                background: '#fafafa'
                             }}
-                            onRemove={(file) => {
-                                const index = imageFiles.findIndex((item, i) =>
-                                    i === Number(file.uid.replace('-', '')));
-
-                                if (index !== -1) {
-                                    // Release object URL to prevent memory leaks
-                                    URL.revokeObjectURL(imagePreviewUrls[index]);
-
-                                    const newFiles = [...imageFiles];
-                                    newFiles.splice(index, 1);
-                                    setImageFiles(newFiles);
-
-                                    const newUrls = [...imagePreviewUrls];
-                                    newUrls.splice(index, 1);
-                                    setImagePreviewUrls(newUrls);
-                                }
-                                return false;
-                            }}
+                            onClick={triggerFileInput}
                         >
-                            <div>
-                                <PlusOutlined />
-                                <div style={{ marginTop: 8 }}>Tải ảnh</div>
+                            <InboxOutlined style={{ fontSize: '48px', color: '#40a9ff' }} />
+                            <p style={{ marginTop: '8px' }}>Nhấp để chọn ảnh hoặc kéo thả ảnh vào đây</p>
+                            <p style={{ color: '#888' }}>Có thể chọn nhiều ảnh bằng cách giữ phím Ctrl</p>
+                            <input
+                                type="file"
+                                ref={fileInputRef}
+                                multiple
+                                accept="image/*"
+                                onChange={handleImageUpload}
+                                style={{ display: 'none' }}
+                            />
+                        </div>
+
+                        {/* Hiển thị xem trước các ảnh đã chọn */}
+                        {imagePreviewUrls.length > 0 && (
+                            <div style={{ marginTop: '16px' }}>
+                                <p>Ảnh đã chọn ({imagePreviewUrls.length}):</p>
+                                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+                                    {imagePreviewUrls.map((url, index) => (
+                                        <div key={index} style={{ position: 'relative' }}>
+                                            <img
+                                                src={url}
+                                                alt={`Preview ${index}`}
+                                                style={{ width: '80px', height: '80px', objectFit: 'cover', borderRadius: '4px' }}
+                                            />
+                                            <Button
+                                                size="small"
+                                                type="text"
+                                                danger
+                                                icon={<DeleteOutlined />}
+                                                style={{
+                                                    position: 'absolute',
+                                                    top: '-10px',
+                                                    right: '-10px',
+                                                    background: 'white',
+                                                    borderRadius: '50%',
+                                                    boxShadow: '0 2px 8px rgba(0,0,0,0.15)'
+                                                }}
+                                                onClick={() => handleRemoveImage(index)}
+                                            />
+                                        </div>
+                                    ))}
+                                </div>
                             </div>
-                        </Upload>
+                        )}
 
                         {/* Hiển thị ảnh hiện tại khi chỉnh sửa */}
                         {isEditing && products.find((p) => p._id === selectedProductId)?.images && imagePreviewUrls.length === 0 && (

@@ -9,13 +9,14 @@ const storage = multer.diskStorage({
         cb(null, uploadDir); // Lưu file vào thư mục uploads/
     },
     filename: (req, file, cb) => {
-        cb(null, Date.now() + path.extname(file.originalname)); // Đổi tên file tránh trùng
+        cb(null, Date.now() + '-' + Math.round(Math.random() * 1E9) + path.extname(file.originalname));
     }
+
 });
 
 // Kiểm tra file có hợp lệ không
 const fileFilter = (req, file, cb) => {
-    const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+    const allowedTypes = ['image/jpeg', 'image/png', 'jpg'];
     if (allowedTypes.includes(file.mimetype)) {
         cb(null, true);
     } else {
@@ -23,10 +24,11 @@ const fileFilter = (req, file, cb) => {
     }
 };
 
-// Cấu hình multer
+// Cấu hình multers
 const upload = multer({
     storage,
-    fileFilter
+    fileFilter,
+    limits: { fileSize: 2 * 1024 * 1024 }
 });
 
 module.exports = upload; 

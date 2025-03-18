@@ -34,29 +34,6 @@ const createProductService = async (data, imageFiles) => {
             }
         }
 
-        // Validate ảnh
-        for (const file of imageFiles) {
-            // Kiểm tra định dạng file
-            const supportedFormats = ['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/jpg'];
-            if (!supportedFormats.includes(file.mimetype)) {
-                throw new Error(`Định dạng file không được hỗ trợ: ${file.originalname}. Chỉ hỗ trợ JPEG, PNG, GIF, WEBP.`);
-            }
-
-            // Kiểm tra kích thước file (20MB = 20 * 1024 * 1024 bytes)
-            const maxSize = 20 * 1024 * 1024;
-            if (file.size > maxSize) {
-                throw new Error(`File quá lớn: ${file.originalname}. Kích thước tối đa là 20MB.`);
-            }
-
-            // Kiểm tra kích thước hình ảnh
-            const sharp = require('sharp');
-            const metadata = await sharp(file.path).metadata();
-
-            const maxDimension = 4472;
-            if (metadata.width > maxDimension || metadata.height > maxDimension) {
-                throw new Error(`Kích thước ảnh ${file.originalname} vượt quá giới hạn. Kích thước tối đa là 4472 x 4472 px.`);
-            }
-        }
 
         // Chuyển đổi danh sách ảnh thành đường dẫn lưu trữ
         const imageUrls = imageFiles.map((file) => `/Upload/${file.filename}`);
