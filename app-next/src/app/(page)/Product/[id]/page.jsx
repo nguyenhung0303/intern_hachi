@@ -1,9 +1,9 @@
 "use client";
 
-import "@/css/style.css";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { getProductByIdApi } from "@/util/api";
+import Head from 'next/head';
 
 const ProductDetail = () => {
     const { id } = useParams();
@@ -64,89 +64,95 @@ const ProductDetail = () => {
     const sizes = product.sizes || [];
 
     return (
-        <div className="container">
+        <>
+            <Head>
+                <title>Chi tiết sản phẩm</title>
+                <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+            </Head>
+            <div className="container">
 
-            <div className="product-box-d">
-                <div className="img-s">
-                    {images.map((img, index) => (
-                        <img
-                            key={index}
-                            src={img}
-                            alt={`${product.name} - ảnh ${index + 1}`}
-                            onClick={() => handleImageClick(index)}
-                            className={selectedImageIndex === index ? "selected" : ""}
-                        />
-                    ))}
-                </div>
-                <div className="img-b">
-                    <img src={images[selectedImageIndex]} alt={product.name} />
-                </div>
+                <div className="product-box-d">
+                    <div className="img-s">
+                        {images.map((img, index) => (
+                            <img
+                                key={index}
+                                src={img}
+                                alt={`${product.name} - ảnh ${index + 1}`}
+                                onClick={() => handleImageClick(index)}
+                                className={selectedImageIndex === index ? "selected" : ""}
+                            />
+                        ))}
+                    </div>
+                    <div className="img-b">
+                        <img src={images[selectedImageIndex]} alt={product.name} />
+                    </div>
 
-                <div className="product-main">
-                    <div className="froduct-name-d">{product.name || "T-SHIRT WITH TAPE DETAILS"}</div>
-                    <div className="froduct-rate froduct-rate-d">
-                        <span className="rate-start-d"><img src={`${BACKEND_URL}/assets/img/start.svg`} alt="" /></span>
-                        <span className="rate-number-d">{product.rating || "1/5"}</span>
-                    </div>
-                    <div className="froduct-price">
-                        <span className="price-new">${price}</span>
-                        {oldPrice && (
-                            <>
-                                <span className="price-old">${oldPrice}</span>
-                                <span className="sale">
-                                    {product.discount ||
-                                        (oldPrice && price ? `-${Math.round((1 - price / oldPrice) * 100)}%` : "")}
-                                </span>
-                            </>
-                        )}
-                    </div>
-                    <div className="froduct-des">
-                        {product.description || "This graphic t-shirt which is perfect for any occasion. Crafted from a soft and breathable fabric, it offers superior comfort and style."}
-                    </div>
-                    <div className="line-ft"></div>
-                    <p className="title-color">Select Colors</p>
-                    <div className="froduct-coler">
-                        {colors.length > 0 ? (
-                            colors.map((color, index) => (
-                                <button
-                                    key={index}
-                                    className={color}
-                                    style={{ backgroundColor: getColorValue(color) }}
-                                ></button>
-                            ))
-                        ) : (
-                            <>
-                                <button className="yl"></button>
-                                <button className="red"></button>
-                            </>
-                        )}
-                    </div>
-                    <div className="line-ft"></div>
-                    <p className="title-color">Choose Size</p>
-                    <div className="froduct-size">
-                        {sizes.length > 0 ? (
-                            sizes.map((size, index) => (
-                                <button key={index} className={getSizeClass(size)}>{size}</button>
-                            ))
-                        ) : (
-                            <>
-                                <button className="sm">Small</button>
-                                <button className="big">Big</button>
-                            </>
-                        )}
-                    </div>
-                    <div className="line-ft"></div>
-                    <div className="Purchase-Controls">
-                        <div className="quantity-selector">
-                            <button onClick={() => changeQuantity(-1)}>−</button>
-                            <span id="quantity">{quantity}</span>
-                            <button onClick={() => changeQuantity(1)}>+</button>
+                    <div className="product-main">
+                        <div className="froduct-name-d">{product.name || "T-SHIRT WITH TAPE DETAILS"}</div>
+                        <div className="froduct-rate froduct-rate-d">
+                            <span className="rate-start-d"><img src={`/assets/img/start.svg`} alt="" /></span>
+                            <span className="rate-number-d">{product.rating || "1/5"}</span>
                         </div>
-                        <button className="banner-button banner-button-d">Add to Cart</button>
+                        <div className="froduct-price">
+                            <span className="price-new">${price}</span>
+                            {oldPrice && (
+                                <>
+                                    <span className="price-old">${oldPrice}</span>
+                                    <span className="sale">
+                                        {product.discount ||
+                                            (oldPrice && price ? `-${Math.round((1 - price / oldPrice) * 100)}%` : "")}
+                                    </span>
+                                </>
+                            )}
+                        </div>
+                        <div className="froduct-des">
+                            {product.description || "This graphic t-shirt which is perfect for any occasion. Crafted from a soft and breathable fabric, it offers superior comfort and style."}
+                        </div>
+                        <div className="line-ft"></div>
+                        <p className="title-color">Select Colors</p>
+                        <div className="froduct-coler">
+                            {colors.length > 0 ? (
+                                colors.map((color, index) => (
+                                    <button
+                                        key={index}
+                                        className={color}
+                                        style={{ backgroundColor: getColorValue(color) }}
+                                    ></button>
+                                ))
+                            ) : (
+                                <>
+                                    <button className="yl"></button>
+                                    <button className="red"></button>
+                                </>
+                            )}
+                        </div>
+                        <div className="line-ft"></div>
+                        <p className="title-color">Choose Size</p>
+                        <div className="froduct-size">
+                            {sizes.length > 0 ? (
+                                sizes.map((size, index) => (
+                                    <button key={index} className={getSizeClass(size)}>{size}</button>
+                                ))
+                            ) : (
+                                <>
+                                    <button className="sm">Small</button>
+                                    <button className="big">Big</button>
+                                </>
+                            )}
+                        </div>
+                        <div className="line-ft"></div>
+                        <div className="Purchase-Controls">
+                            <div className="quantity-selector">
+                                <button onClick={() => changeQuantity(-1)}>−</button>
+                                <span id="quantity">{quantity}</span>
+                                <button onClick={() => changeQuantity(1)}>+</button>
+                            </div>
+                            <button className="banner-button banner-button-d">Add to Cart</button>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </>
     );
 };
 

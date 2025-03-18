@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { Table, Button, Space, Typography, Modal, Form, Input, message, Popconfirm, Image, Select } from "antd";
+import { Table, Button, Space, Typography, Modal, Form, Input, message, Popconfirm, Image, Select, Upload } from "antd";
 import { PlusOutlined, EditOutlined, DeleteOutlined } from "@ant-design/icons";
 import { getProductApi, createProductApi, updateProductApi, deleteProductApi } from "@/util/api";
 import { getCategoryApi } from "@/util/api";
@@ -17,10 +17,12 @@ export default function ProductTable() {
     const [isEditing, setIsEditing] = useState(false);
     const [selectedProductId, setSelectedProductId] = useState(null);
     const [imageFiles, setImageFiles] = useState([]);
+    const [imagePreviewUrls, setImagePreviewUrls] = useState([]);
     const [form] = Form.useForm();
     const [submitLoading, setSubmitLoading] = useState(false);
 
     const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
+    const SIZE_OPTIONS = ["XS", "S", "M", "L", "XL", "XXL", "XXXL"];
 
     const fetchProducts = async () => {
         setLoading(true);
@@ -53,20 +55,40 @@ export default function ProductTable() {
     }, []);
 
     const handleImageUpload = (e) => {
-        setImageFiles(Array.from(e.target.files));
+        const files = Array.from(e.target.files);
+        setImageFiles(files);
+
+        // Tạo URL xem trước cho các ảnh đã chọn
+        const previewUrls = files.map(file => URL.createObjectURL(file));
+        setImagePreviewUrls(previewUrls);
     };
+
+    // Xóa các URL xem trước khi component unmount để tránh rò rỉ bộ nhớ
+    useEffect(() => {
+        return () => {
+            imagePreviewUrls.forEach(url => URL.revokeObjectURL(url));
+        };
+    }, [imagePreviewUrls]);
 
     const showModal = (product = null) => {
         if (product) {
             setIsEditing(true);
             setSelectedProductId(product._id);
+
+            // Kiểm tra nếu sizes là chuỗi trước khi thực hiện split
+            let sizesArray = [];
+            if (product.sizes) {
+                sizesArray = typeof product.sizes === 'string'
+                    ? product.sizes.split(',').map(size => size.trim())
+                    : Array.isArray(product.sizes) ? product.sizes : [];
+            }
+
             form.setFieldsValue({
                 name: product.name,
                 oldPrice: product.oldPrice,
                 newPrice: product.newPrice,
                 rating: product.rating,
-                colors: product.colors,
-                sizes: product.sizes,
+                sizes: sizesArray,
                 categoryIds: product.categoryIds ? product.categoryIds.map(cat =>
                     typeof cat === 'object' ? cat._id : cat) : [],
             });
@@ -76,12 +98,16 @@ export default function ProductTable() {
             form.resetFields();
         }
         setImageFiles([]);
+        setImagePreviewUrls([]);
         setIsModalOpen(true);
     };
 
     const handleCancel = () => {
         form.resetFields();
         setImageFiles([]);
+        // Xóa các URL xem trước để tránh rò rỉ bộ nhớ
+        imagePreviewUrls.forEach(url => URL.revokeObjectURL(url));
+        setImagePreviewUrls([]);
         setIsModalOpen(false);
         setIsEditing(false);
         setSelectedProductId(null);
@@ -97,8 +123,10 @@ export default function ProductTable() {
             formData.append("oldPrice", values.oldPrice);
             formData.append("newPrice", values.newPrice);
             formData.append("rating", values.rating || "0");
-            formData.append("colors", values.colors || "");
-            formData.append("sizes", values.sizes || "");
+
+            // Chuyển đổi sizes từ array sang string trước khi lưu
+            const sizesString = values.sizes ? values.sizes.join(", ") : "";
+            formData.append("sizes", sizesString);
 
             // Thêm categoryIds vào formData
             if (values.categoryIds && values.categoryIds.length > 0) {
@@ -122,7 +150,7 @@ export default function ProductTable() {
                     handleCancel(); // Đóng modal
                     fetchProducts();
                 } else {
-                    message.error("Cập nhật sản phẩm thất bại!");
+                    message.error(response?.message || "Cập nhật sản phẩm thất bại!");
                 }
             } else {
                 response = await createProductApi(formData);
@@ -131,11 +159,16 @@ export default function ProductTable() {
                     handleCancel();
                     fetchProducts();
                 } else {
-                    message.error("Thêm sản phẩm thất bại!");
+                    message.error(response?.message || "Thêm sản phẩm thất bại!");
                 }
             }
         } catch (error) {
-            message.error(`Có lỗi xảy ra khi ${isEditing ? "cập nhật" : "thêm"} sản phẩm!`);
+            if (error.errorFields) {
+                // Form validation errors
+                message.error(`Vui lòng kiểm tra lại thông tin nhập!`);
+            } else {
+                message.error(`Có lỗi xảy ra khi ${isEditing ? "cập nhật" : "thêm"} sản phẩm: ${error.message || ""}`);
+            }
         } finally {
             setSubmitLoading(false);
         }
@@ -226,12 +259,6 @@ export default function ProductTable() {
             ),
         },
         {
-            title: "Màu sắc",
-            dataIndex: "colors",
-            key: "colors",
-            ellipsis: true,
-        },
-        {
             title: "Size",
             dataIndex: "sizes",
             key: "sizes",
@@ -300,7 +327,11 @@ export default function ProductTable() {
                     <Form.Item
                         name="name"
                         label="Tên sản phẩm"
-                        rules={[{ required: true, message: "Vui lòng nhập tên sản phẩm!" }]}
+                        rules={[
+                            { required: true, message: "Vui lòng nhập tên sản phẩm!" },
+                            { min: 5, message: "Tên sản phẩm phải có ít nhất 5 ký tự!" },
+                            { max: 30, message: "Tên sản phẩm không được vượt quá 30 ký tự!" }
+                        ]}
                     >
                         <Input placeholder="Nhập tên sản phẩm" />
                     </Form.Item>
@@ -308,7 +339,21 @@ export default function ProductTable() {
                     <Form.Item
                         name="oldPrice"
                         label="Giá cũ"
-                        rules={[{ required: true, message: "Vui lòng nhập giá cũ!" }]}
+                        rules={[
+                            { required: true, message: "Vui lòng nhập giá cũ!" },
+                            {
+                                pattern: /^\d+(\.\d+)?$/,
+                                message: "Giá cũ chỉ được nhập số!"
+                            },
+                            {
+                                validator: (_, value) => {
+                                    if (value && value.toString().replace(/\D/g, '').length > 9) {
+                                        return Promise.reject("Giá cũ không được vượt quá 9 chữ số!");
+                                    }
+                                    return Promise.resolve();
+                                }
+                            }
+                        ]}
                     >
                         <Input placeholder="Nhập giá cũ" suffix="đ" />
                     </Form.Item>
@@ -316,12 +361,36 @@ export default function ProductTable() {
                     <Form.Item
                         name="newPrice"
                         label="Giá mới"
-                        rules={[{ required: true, message: "Vui lòng nhập giá mới!" }]}
+                        rules={[
+                            { required: true, message: "Vui lòng nhập giá mới!" },
+                            {
+                                pattern: /^\d+(\.\d+)?$/,
+                                message: "Giá mới chỉ được nhập số!"
+                            },
+                            {
+                                validator: (_, value) => {
+                                    if (value && value.toString().replace(/\D/g, '').length > 9) {
+                                        return Promise.reject("Giá mới không được vượt quá 9 chữ số!");
+                                    }
+                                    return Promise.resolve();
+                                }
+                            }
+                        ]}
                     >
                         <Input placeholder="Nhập giá mới" suffix="đ" />
                     </Form.Item>
 
-                    <Form.Item name="rating" label="Đánh giá">
+                    <Form.Item
+                        name="rating"
+                        label="Đánh giá"
+                        rules={[
+                            {
+                                pattern: /^\d+(\.\d+)?$/,
+                                message: "Đánh giá chỉ được nhập số!",
+                                validateTrigger: 'onBlur'
+                            }
+                        ]}
+                    >
                         <Input placeholder="Nhập đánh giá" />
                     </Form.Item>
 
@@ -343,36 +412,90 @@ export default function ProductTable() {
                         </Select>
                     </Form.Item>
 
-                    <Form.Item name="colors" label="Màu sắc">
-                        <Input placeholder="Nhập màu sắc (VD: Đỏ, Xanh, Đen)" />
+                    <Form.Item
+                        name="sizes"
+                        label="Size"
+                    >
+                        <Select
+                            mode="multiple"
+                            placeholder="Chọn size"
+                            style={{ width: '100%' }}
+                            optionFilterProp="children"
+                        >
+                            {SIZE_OPTIONS.map(size => (
+                                <Option key={size} value={size}>
+                                    {size}
+                                </Option>
+                            ))}
+                        </Select>
                     </Form.Item>
 
-                    <Form.Item name="sizes" label="Size">
-                        <Input placeholder="Nhập size (VD: S, M, L, XL)" />
-                    </Form.Item>
+                    // Replace the existing Form.Item for image upload with this one
 
                     <Form.Item label="Hình ảnh">
-                        <input
-                            type="file"
-                            multiple
-                            accept="image/*"
-                            onChange={handleImageUpload}
-                        />
+                        <Upload
+                            listType="picture-card"
+                            fileList={imageFiles.map((file, index) => ({
+                                uid: `-${index}`,
+                                name: file.name,
+                                status: 'done',
+                                url: imagePreviewUrls[index],
+                                originFileObj: file,
+                            }))}
+                            beforeUpload={(file) => {
+                                const isImage = file.type.startsWith('image/');
+                                if (!isImage) {
+                                    message.error('Chỉ có thể tải lên tệp hình ảnh!');
+                                    return false;
+                                }
 
-                        {isEditing && products.find((p) => p._id === selectedProductId)?.images && (
+                                // Add to state without actually uploading
+                                setImageFiles(prev => [...prev, file]);
+                                setImagePreviewUrls(prev => [...prev, URL.createObjectURL(file)]);
+                                return false; // Prevent automatic upload
+                            }}
+                            onRemove={(file) => {
+                                const index = imageFiles.findIndex((item, i) =>
+                                    i === Number(file.uid.replace('-', '')));
+
+                                if (index !== -1) {
+                                    // Release object URL to prevent memory leaks
+                                    URL.revokeObjectURL(imagePreviewUrls[index]);
+
+                                    const newFiles = [...imageFiles];
+                                    newFiles.splice(index, 1);
+                                    setImageFiles(newFiles);
+
+                                    const newUrls = [...imagePreviewUrls];
+                                    newUrls.splice(index, 1);
+                                    setImagePreviewUrls(newUrls);
+                                }
+                                return false;
+                            }}
+                        >
+                            <div>
+                                <PlusOutlined />
+                                <div style={{ marginTop: 8 }}>Tải ảnh</div>
+                            </div>
+                        </Upload>
+
+                        {/* Hiển thị ảnh hiện tại khi chỉnh sửa */}
+                        {isEditing && products.find((p) => p._id === selectedProductId)?.images && imagePreviewUrls.length === 0 && (
                             <div style={{ marginTop: "10px" }}>
                                 <p>Ảnh hiện tại:</p>
-                                <div style={{ display: "flex", flexWrap: "wrap", gap: "8px" }}>
-                                    {products.find((p) => p._id === selectedProductId)?.images.map((image, index) => (
-                                        <Image
-                                            key={index}
-                                            src={`${BACKEND_URL}/${image}`}
-                                            alt={`Ảnh ${index + 1}`}
-                                            width={60}
-                                            height={60}
-                                        />
-                                    ))}
-                                </div>
+                                <Image.PreviewGroup>
+                                    <div style={{ display: "flex", flexWrap: "wrap", gap: "8px" }}>
+                                        {products.find((p) => p._id === selectedProductId)?.images.map((image, index) => (
+                                            <Image
+                                                key={index}
+                                                src={`${BACKEND_URL}/${image}`}
+                                                alt={`Ảnh ${index + 1}`}
+                                                width={80}
+                                                height={80}
+                                            />
+                                        ))}
+                                    </div>
+                                </Image.PreviewGroup>
                                 <p style={{ color: "red", fontSize: "12px" }}>
                                     Lưu ý: Tải lên ảnh mới sẽ thay thế tất cả ảnh cũ
                                 </p>

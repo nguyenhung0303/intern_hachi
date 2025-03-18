@@ -6,7 +6,7 @@ const routerAPI = express.Router();
 const upload = require('../middelware/multer.js');
 const { createCategoryController, getCategorys, updateCategoryController, deleteCategory } = require('../controllers/category.js');
 
-// routerAPI.all("*", auth)
+routerAPI.all("*", auth)
 
 
 routerAPI.get('/', (req, res) => {

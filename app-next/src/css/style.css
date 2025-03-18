@@ -39,6 +39,39 @@
     border-radius: 62px;
 }
 
+.account-dropdown-container {
+    position: relative;
+}
+
+.account-dropdown {
+    position: absolute;
+    right: 0;
+    top: 100%;
+    background-color: white;
+    border: 1px solid #eaeaea;
+    border-radius: 4px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 120px;
+    z-index: 100;
+    margin-top: 8px;
+}
+
+.account-dropdown ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.account-dropdown li {
+    padding: 10px 15px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.account-dropdown li:hover {
+    background-color: #f5f5f5;
+}
+
 .search-icon {
     position: absolute;
     top: 50%;
@@ -48,6 +81,55 @@
     width: 20px;
 }
 
+.product-main {
+    width: 50%;
+}
+
+.img-s {
+    width: 17%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.menu-tag {
+    position: relative;
+    cursor: pointer;
+}
+
+.menu-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: white;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    min-width: 120px;
+    border-radius: 4px;
+    margin-top: 5px;
+}
+
+.menu-dropdown ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.menu-dropdown li {
+    padding: 10px 15px;
+    transition: background-color 0.2s ease;
+}
+
+.menu-dropdown li:hover {
+    background-color: #f5f5f5;
+}
+
+.menu-dropdown a {
+    text-decoration: none;
+    color: #333;
+    display: block;
+}
+
 .header-h {
     display: flex;
     justify-content: space-between;
@@ -55,6 +137,22 @@
     padding: 24px 0 24px 0;
 
 }
+
+.account-icon-wrapper {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.admin-hint {
+    font-size: 10px;
+    color: #666;
+    margin-top: 2px;
+    font-weight: 500;
+}
+
+
 
 .menu-item ul {
     display: flex;
@@ -337,7 +435,6 @@
 
 .product {
     display: flex;
-    justify-content: space-between;
 }
 
 .review-item {
@@ -422,12 +519,20 @@
 
 .product-p {
     flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+}
+
+.product-item-page-img {
+    max-width: 295px;
+    height: 295px;
 }
 
 .product-item-page {
     height: auto;
     margin-bottom: 32px;
 }
+
 
 .about-left h2 {
     color: white;
@@ -533,6 +638,11 @@
 
 }
 
+a:hover,
+.product-item:hover {
+    text-decoration: none;
+}
+
 .footer-main-item h2 {
     font-size: 16px;
     font-weight: 500;
@@ -598,11 +708,14 @@
     background: #F2F0F1;
 }
 
-
+.product-box {
+    width: 75%;
+}
 
 .product-box-d {
     display: flex;
     margin-top: 36px;
+    gap: 30px;
 }
 
 .quantity-selector {
@@ -611,8 +724,6 @@
     background: #f5f5f5;
     border-radius: 20px;
     padding: 5px 10px;
-    width: 170px;
-    max-width: 170px;
     justify-content: space-between;
     margin-top: 15px;
 }
@@ -631,21 +742,30 @@
     text-align: center;
 }
 
+.img-b img {
+    border-radius: 20px;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.img-s img {
+    width: 100%;
+    height: 33%;
+    object-fit: cover;
+}
+
 .img-b {
-    width: 444px;
-    margin-right: 40px;
+    width: 45%;
 }
 
 .review-start img {
     width: 22px;
 }
 
-.img-s {
-    width: 152px;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    margin-right: 14px;
+
+.img-s img {
+    border-radius: 20px;
 }
 
 .froduct-name-d {
@@ -743,17 +863,25 @@
 }
 
 .banner-button-d {
-    width: 400px;
-    max-width: 400px;
+
+    width: 100%;
 }
 
 .product-page-box {
     display: flex;
     gap: 21px;
+    margin-top: 30px;
+}
+
+.filter-category-item ul li a.active {
+    color: red;
+    font-weight: bold;
+    text-decoration: none;
+    /* hoặc những hiệu ứng khác mà bạn muốn */
 }
 
 .product-filter {
-    width: 290px;
+    width: 25%;
     max-width: 100%;
 }
 
@@ -786,15 +914,14 @@
     margin-bottom: 20px;
 }
 
-
+.product-box-ok {
+    width: 100%;
+}
 
 .pagination {
     display: flex;
     gap: 8px;
     margin-top: 20px;
-    max-width: 420px;
-    margin-left: auto;
-    margin-right: auto;
 }
 
 .pagination button {

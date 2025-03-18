@@ -42,4 +42,46 @@ const deleteCategoryApi = (id) => {
     const URL_API = `/v1/api/delete_category/${id}`;
     return axios.delete(URL_API);
 };
-export { LoginApi, getProductApi, getProductByIdApi, createProductApi, updateProductApi, deleteProductApi, getCategoryApi, createCategoryApi, updateCategoryApi, deleteCategoryApi }
+const fetchProducts = async () => {
+    try {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/api/Product`, {
+            cache: "no-store",
+            next: { revalidate: 0 }, // Luôn lấy dữ liệu mới
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+        });
+
+        console.log("check>>>respro", response)
+        if (!response.ok) {
+            throw new Error("Lỗi khi tải dữ liệu");
+        }
+        return response.json();
+    } catch (error) {
+        console.error("Lỗi fetch:", error);
+        return { data: [] };
+    }
+};
+const fetchCategorys = async () => {
+    try {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/api/get_category`, {
+            cache: "no-store",
+            next: { revalidate: 0 }, // Luôn lấy dữ liệu mới
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+        });
+
+        console.log("check>>>respro", response)
+        if (!response.ok) {
+            throw new Error("Lỗi khi tải dữ liệu");
+        }
+        return response.json();
+    } catch (error) {
+        console.error("Lỗi fetch:", error);
+        return { data: [] };
+    }
+};
+export { LoginApi, getProductApi, getProductByIdApi, createProductApi, updateProductApi, deleteProductApi, getCategoryApi, createCategoryApi, updateCategoryApi, deleteCategoryApi, fetchProducts, fetchCategorys }

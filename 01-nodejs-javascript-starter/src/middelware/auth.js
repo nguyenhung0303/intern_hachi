@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken')
 
 const auth = (req, res, next) => {
 
-    const publicRoutes = ["/login", "/sigup", "/Product"];
+    const publicRoutes = ["/login", "/sigup", "/Product", "/get_category"];
 
     if (publicRoutes.includes(req.path)) {
         return next();

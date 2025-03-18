@@ -3,6 +3,61 @@ const Product = require('../models/product');
 
 const createProductService = async (data, imageFiles) => {
     try {
+        // Validate tên sản phẩm (5-30 ký tự)
+        if (!data.name || data.name.length < 5 || data.name.length > 30) {
+            throw new Error('Tên sản phẩm phải từ 5 đến 30 ký tự.');
+        }
+
+        // Validate giá mới - không được chứa chữ cái
+        if (data.newPrice) {
+            const newPriceValue = data.newPrice.toString();
+            if (!/^\d+(\.\d+)?$/.test(newPriceValue)) {
+                throw new Error('Giá sản phẩm chỉ được chứa số, không được chứa chữ.');
+            }
+
+            // Kiểm tra tối đa 9 chữ số
+            if (newPriceValue.replace(/\D/g, '').length > 9) {
+                throw new Error('Giá sản phẩm không được vượt quá 9 chữ số.');
+            }
+        }
+
+        // Validate giá cũ (nếu có) - không được chứa chữ cái
+        if (data.oldPrice) {
+            const oldPriceValue = data.oldPrice.toString();
+            if (!/^\d+(\.\d+)?$/.test(oldPriceValue)) {
+                throw new Error('Giá cũ sản phẩm chỉ được chứa số, không được chứa chữ.');
+            }
+
+            // Kiểm tra tối đa 9 chữ số
+            if (oldPriceValue.replace(/\D/g, '').length > 9) {
+                throw new Error('Giá cũ sản phẩm không được vượt quá 9 chữ số.');
+            }
+        }
+
+        // Validate ảnh
+        for (const file of imageFiles) {
+            // Kiểm tra định dạng file
+            const supportedFormats = ['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/jpg'];
+            if (!supportedFormats.includes(file.mimetype)) {
+                throw new Error(`Định dạng file không được hỗ trợ: ${file.originalname}. Chỉ hỗ trợ JPEG, PNG, GIF, WEBP.`);
+            }
+
+            // Kiểm tra kích thước file (20MB = 20 * 1024 * 1024 bytes)
+            const maxSize = 20 * 1024 * 1024;
+            if (file.size > maxSize) {
+                throw new Error(`File quá lớn: ${file.originalname}. Kích thước tối đa là 20MB.`);
+            }
+
+            // Kiểm tra kích thước hình ảnh
+            const sharp = require('sharp');
+            const metadata = await sharp(file.path).metadata();
+
+            const maxDimension = 4472;
+            if (metadata.width > maxDimension || metadata.height > maxDimension) {
+                throw new Error(`Kích thước ảnh ${file.originalname} vượt quá giới hạn. Kích thước tối đa là 4472 x 4472 px.`);
+            }
+        }
+
         // Chuyển đổi danh sách ảnh thành đường dẫn lưu trữ
         const imageUrls = imageFiles.map((file) => `/Upload/${file.filename}`);
 
@@ -25,13 +80,13 @@ const createProductService = async (data, imageFiles) => {
         // Tạo sản phẩm mới
         const product = new Product({
             name: data.name,
-            oldPrice, // Cho phép giá cũ rỗng
+            oldPrice,
             newPrice: parseFloat(data.newPrice),
             description: data.description || "",
             colors,
             sizes,
             images: imageUrls,
-            categoryIds, // Thêm trường categoryIds
+            categoryIds,
         });
 
         console.log("check>>>>product new", product);

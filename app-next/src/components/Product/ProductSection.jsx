@@ -3,31 +3,12 @@ import Image from "next/image";
 import Link from "next/link";
 import ProductSwiper from "@/components/Product/ProductSwiper"; // Client component riêng cho Swiper
 import { cache } from "react";
+import { fetchProducts } from "@/util/api";
 
 // Sử dụng async để tạo component SSR
 async function ProductSection() {
     // Truy cập API trực tiếp từ server
-    const fetchProducts = async () => {
-        try {
-            const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/api/Product`, {
-                cache: "no-store",
-                next: { revalidate: 0 }, // Luôn lấy dữ liệu mới
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-            });
 
-            console.log("check>>>respro", response)
-            if (!response.ok) {
-                throw new Error("Lỗi khi tải dữ liệu");
-            }
-            return response.json();
-        } catch (error) {
-            console.error("Lỗi fetch:", error);
-            return { data: [] };
-        }
-    };
 
     // Lấy dữ liệu sản phẩm
     const productData = await fetchProducts();
@@ -41,12 +22,12 @@ async function ProductSection() {
 
     return (
         <div className="container">
-            <div className="product-box">
+            <div className="product-box-ok product-box">
                 <h2 className="product-title">NEW ARRIVALS</h2>
                 {/* Sử dụng client component riêng cho Swiper */}
                 <ProductSwiper products={products} />
             </div>
-            <Link href="/products" className="product-button banner-button">
+            <Link href="/ProductP" className="product-button banner-button">
                 View All
             </Link>
         </div>
