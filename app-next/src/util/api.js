@@ -14,6 +14,27 @@ const getProductByIdApi = (id) => {
     const URL_API = `/v1/api/Product/${id}`;
     return axios.get(URL_API);
 };
+const fetchProductsById = async (id) => {
+    try {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/api/Product/${id}`, {
+            cache: "no-store",
+            next: { revalidate: 0 }, // Luôn lấy dữ liệu mới
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+        });
+
+        console.log("check>>>respro", response)
+        if (!response.ok) {
+            throw new Error("Lỗi khi tải dữ liệu");
+        }
+        return response.json();
+    } catch (error) {
+        console.error("Lỗi fetch:", error);
+        return { data: [] };
+    }
+};
 const createProductApi = (productData) => {
     const URL_API = `/v1/api/create_product`;
     return axios.post(URL_API, productData);
@@ -84,4 +105,4 @@ const fetchCategorys = async () => {
         return { data: [] };
     }
 };
-export { LoginApi, getProductApi, getProductByIdApi, createProductApi, updateProductApi, deleteProductApi, getCategoryApi, createCategoryApi, updateCategoryApi, deleteCategoryApi, fetchProducts, fetchCategorys }
+export { LoginApi, getProductApi, getProductByIdApi, createProductApi, updateProductApi, deleteProductApi, fetchProductsById, getCategoryApi, createCategoryApi, updateCategoryApi, deleteCategoryApi, fetchProducts, fetchCategorys }

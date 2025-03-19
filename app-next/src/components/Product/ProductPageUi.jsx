@@ -140,8 +140,8 @@ const ProductPageUI = ({ products, categories }) => {
                         {displayedProducts.length > 0 ? (
                             displayedProducts.map((product, index) => (
                                 <Link
-                                    href={`/Product/${product._id}`}
-                                    key={product._id || index}
+                                    href={`/Product/${product.slug}`}
+                                    key={product.slug || index}
                                     className="product-item product-item-page cursor-pointer"
                                 >
                                     <Image

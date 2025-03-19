@@ -155,6 +155,21 @@ const getProductByIdService = async (productId) => {
         throw new Error(`Lỗi khi lấy sản phẩm: ${error.message}`);
     }
 };
+const getProductBySlugService = async (productSlug) => {
+    try {
+        console.log("check product slug >>>", productSlug);
+        const product = await Product.findOne({ slug: productSlug }); // Tìm sản phẩm theo slug
+
+        if (!product) {
+            throw new Error("Không tìm thấy sản phẩm.");
+        }
+
+        return product;
+    } catch (error) {
+        throw new Error(`Lỗi khi lấy sản phẩm: ${error.message}`);
+    }
+};
+
 const deleteProductService = async (id) => {
     try {
 
@@ -177,5 +192,5 @@ const deleteProductService = async (id) => {
 };
 
 module.exports = {
-    createProductService, getProductService, getProductByIdService, updateProductService, deleteProductService
+    createProductService, getProductService, getProductByIdService, updateProductService, deleteProductService, getProductBySlugService
 }

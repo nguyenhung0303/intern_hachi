@@ -44,7 +44,7 @@ export default function ProductSwiper({ products }) {
                             key={index}
                             className="product-item"
                         >
-                            <Link href={`/Product/${product._id}`}>
+                            <Link href={`/Product/${product.slug}`}>
                                 {firstImage ? (
                                     <div style={{ position: "relative", width: "100%", height: "298px" }}>
                                         <Image

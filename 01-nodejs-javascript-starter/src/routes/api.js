@@ -1,7 +1,7 @@
 const express = require('express');
 const { GetUser, CreateUser, Login, } = require('../controllers/userController.js');
 const auth = require('../middelware/auth.js')
-const { createProductController, getProducts, getProductsById, updateProduct, deleteProduct } = require('../controllers/productController.js');
+const { createProductController, getProducts, getProductsById, updateProduct, deleteProduct, getProductsBySlug } = require('../controllers/productController.js');
 const routerAPI = express.Router();
 const multer = require('multer');
 const upload = require('../middelware/multer.js');
@@ -37,7 +37,8 @@ routerAPI.post("/create_product", (req, res, next) => {
     });
 }, createProductController)
 routerAPI.get("/Product", getProducts)
-routerAPI.get("/Product/:id", getProductsById)
+// routerAPI.get("/Product/:id", getProductsById)
+routerAPI.get("/Product/:slug", getProductsBySlug);
 routerAPI.post("/UpdateProduct/:id", upload.array('images', 10), updateProduct)
 routerAPI.delete("/deleteProduct/:id", deleteProduct)
 routerAPI.post("/create_category", (req, res, next) => {
