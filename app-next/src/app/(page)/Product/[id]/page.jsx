@@ -108,24 +108,9 @@ const ProductDetail = () => {
                         <div className="froduct-des">
                             {product.description || "This graphic t-shirt which is perfect for any occasion. Crafted from a soft and breathable fabric, it offers superior comfort and style."}
                         </div>
-                        <div className="line-ft"></div>
-                        <p className="title-color">Select Colors</p>
-                        <div className="froduct-coler">
-                            {colors.length > 0 ? (
-                                colors.map((color, index) => (
-                                    <button
-                                        key={index}
-                                        className={color}
-                                        style={{ backgroundColor: getColorValue(color) }}
-                                    ></button>
-                                ))
-                            ) : (
-                                <>
-                                    <button className="yl"></button>
-                                    <button className="red"></button>
-                                </>
-                            )}
-                        </div>
+
+
+
                         <div className="line-ft"></div>
                         <p className="title-color">Choose Size</p>
                         <div className="froduct-size">

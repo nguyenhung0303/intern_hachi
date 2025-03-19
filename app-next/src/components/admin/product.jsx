@@ -279,11 +279,7 @@ export default function ProductTable() {
             key: "newPrice",
             render: (value) => `${value}đ`,
         },
-        {
-            title: "Đánh giá",
-            dataIndex: "rating",
-            key: "rating",
-        },
+
         {
             title: "Danh mục",
             dataIndex: "categoryIds",
@@ -422,19 +418,7 @@ export default function ProductTable() {
                         <Input placeholder="Nhập giá mới" suffix="đ" />
                     </Form.Item>
 
-                    <Form.Item
-                        name="rating"
-                        label="Đánh giá"
-                        rules={[
-                            {
-                                pattern: /^\d+(\.\d+)?$/,
-                                message: "Đánh giá chỉ được nhập số!",
-                                validateTrigger: 'onBlur'
-                            }
-                        ]}
-                    >
-                        <Input placeholder="Nhập đánh giá" />
-                    </Form.Item>
+
 
                     <Form.Item
                         name="categoryIds"
