@@ -6,9 +6,12 @@ import "@/css/layoutdash.css";
 export default function Header() {
     return (
         <header className="sidebar">
-            <Link href={"/"}><div className="logo">Logo(click user home)</div></Link>
+            <Link href={"/"}><div className="logo">ADMIN</div></Link>
             <nav>
                 <ul className="menu">
+                    <li>
+                        <Link href="/">Home</Link>
+                    </li>
                     <li>
                         <Link href="/dash">Product</Link>
                     </li>

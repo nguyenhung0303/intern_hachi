@@ -8,12 +8,20 @@ const Header = () => {
     const router = useRouter();
     const [showDropdown, setShowDropdown] = useState(false);
     const [showMenuDropdown, setShowMenuDropdown] = useState(false);
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
     const dropdownRef = useRef(null);
     const menuDropdownRef = useRef(null);
 
+    // Check if user is logged in when component mounts
+    useEffect(() => {
+        const token = localStorage.getItem("access_token");
+        setIsLoggedIn(!!token);
+    }, []);
+
     const handleLogOut = () => {
         localStorage.removeItem("access_token");
-        router.replace("/login");
+        setIsLoggedIn(false);
+        router.replace("/");
     };
 
     // Close dropdowns when clicking outside
@@ -49,7 +57,6 @@ const Header = () => {
                                 <ul>
                                     <li><Link href="/">Home</Link></li>
                                     <li><Link href="/ProductP">Product</Link></li>
-
                                 </ul>
                             </div>
                         )}
@@ -90,15 +97,21 @@ const Header = () => {
                                 className="account-icon-wrapper"
                             >
                                 <img src="/assets/img/accout.svg" alt="Account Icon" />
-                                <span className="admin-hint">Admin</span>
+                                {isLoggedIn && <span className="admin-hint">Admin</span>}
                             </div>
 
                             {showDropdown && (
                                 <div className="account-dropdown">
                                     <ul>
-                                        <li><Link href="/profile">Profile</Link></li>
-                                        <li><Link href="/dash">Admin</Link></li>
-                                        <li onClick={handleLogOut}>Logout</li>
+                                        {isLoggedIn ? (
+                                            <>
+                                                <li><Link href="/profile">Profile</Link></li>
+                                                <li><Link href="/dash">Admin</Link></li>
+                                                <li onClick={handleLogOut}>Logout</li>
+                                            </>
+                                        ) : (
+                                            <li><Link href="/login">Login</Link></li>
+                                        )}
                                     </ul>
                                 </div>
                             )}
