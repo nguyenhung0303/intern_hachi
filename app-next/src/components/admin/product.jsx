@@ -117,13 +117,13 @@ export default function ProductTable() {
     const handleSubmit = async () => {
         try {
             const values = await form.validateFields();
-            const allowedTypes = ["image/jpeg", "image/png", "image/jpg"];
+            const allowedTypes = ["image/jpeg", "image/png", "image/jpg", "image/webp"];
             setSubmitLoading(true);
 
             let hasOversizedFile = false;
             for (const file of imageFiles) {
                 if (!allowedTypes.includes(file.type)) {
-                    toast.error(`Ảnhk hông đúng định dạng! Chỉ chấp nhận JPG, JPEG, PNG.`);
+                    toast.error(`Ảnhk hông đúng định dạng! Chỉ chấp nhận JPG, JPEG, PNG,webp.`);
                     hasInvalidFile = true;
                 } else if (file.size > 2 * 1024 * 1024) {
                     toast.error(`Ảnh vượt quá 2MB!`);
